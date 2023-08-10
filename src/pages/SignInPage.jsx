@@ -51,7 +51,7 @@ export const SignInPage = () => {
   return (
     <>
       <LoginContainer>
-        <BasicHeader>Login</BasicHeader>
+        <BasicHeader>Sign In</BasicHeader>
         <SignUpInInput
           ref={emailRef}
           inputType="email"
