@@ -3,24 +3,29 @@ import { useEffect, useRef } from "react";
 
 const editor_api = import.meta.env.VITE_EDITER_API_KEY;
 
-export const TinyEditor = ({ handleContent }) => {
+export const TinyEditor = ({ value, handleContent }) => {
   const editorRef = useRef();
 
   useEffect(() => {
     const handleEditorInit = (editor) => {
       editorRef.current = editor;
-      handleContent(editor.getContent());
     };
+
     if (editorRef.current) {
       handleEditorInit(editorRef.current);
     }
-  }, [handleContent]);
+  }, []);
 
   return (
     <Editor
       apiKey={editor_api}
+      value={value}
       onInit={(ent, editor) => (editorRef.current = editor)}
+      onEditorChange={(content) => {
+        handleContent(content);
+      }}
       init={{
+        placeholder: "내용을 입력하세요",
         language: "ko_KR",
         selector: "#tiny",
         menubar: false,
@@ -59,7 +64,6 @@ export const TinyEditor = ({ handleContent }) => {
         content_style:
           "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
       }}
-      initialValue="<p>안녕하세요</p>"
     />
   );
 };

@@ -18,15 +18,15 @@ getDatabase(firebaseApp);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Suspense fallback="...loading">
-      <RecoilRoot>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <BrowserRouter>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <BrowserRouter>
+          <Suspense fallback="...loading">
             <App />
-          </BrowserRouter>
-        </ThemeProvider>
-      </RecoilRoot>
-    </Suspense>
+          </Suspense>
+        </BrowserRouter>
+      </ThemeProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );

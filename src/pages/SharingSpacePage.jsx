@@ -2,9 +2,30 @@ import { styled } from "styled-components";
 import { PageMargin } from "../components/PageMargin";
 import { BasicHeader } from "../components/BasicHeader";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { AllPostsSelector } from "../recoil/DatabaseSelectors";
+import { increaseViews } from "../utils/handleDataFromFirebase";
+
+export const convertSecondsToDate = (seconds) => {
+  const date = new Date(seconds * 1000);
+  return date.toLocaleString();
+};
 
 export const SharingSpacePage = () => {
   const navigation = useNavigate();
+  const AllPosts = useRecoilValue(AllPostsSelector);
+
+  const sortedPosts = AllPosts?.slice().sort((a, b) => {
+    const dateA = a.postedDate?.seconds || 0;
+    const dateB = b.postedDate?.seconds || 0;
+    return dateB - dateA;
+  });
+
+  const handlePostClick = (post) => {
+    increaseViews(post.id);
+    navigation(`/sharing-space/${post.id}`, {});
+  };
+
   return (
     <>
       <PageMargin>
@@ -29,28 +50,32 @@ export const SharingSpacePage = () => {
           </SearchSection>
 
           <div className="posts">
-            <div className="item">
-              <div>
-                <div className="title">뉴스 공유 드려요</div>
-                <div className="category">| 나누어요</div>
-                <div className="writer">정지혜</div>
-                <div className="content">
-                  아동 실종 만큼이나 성인 실종 문제도 심각해 작년 한해동안 아동
-                  및 취약 계층의 실종이 크게...
+            {sortedPosts.map((post) => {
+              const createDate = convertSecondsToDate(post.postedDate?.seconds);
+              return (
+                <div
+                  className="item"
+                  key={post.id}
+                  onClick={() => handlePostClick(post)}
+                >
+                  <Header>
+                    <div>
+                      <div className="category">| {post.category}</div>
+                      <div className="title">{post.title}</div>
+                    </div>
+                    <div className="writer">{post.name}</div>
+                  </Header>
+                  <Footer>
+                    <div className="counts">
+                      <span>👀 {post.viewCount}</span>
+                      <span>💬 {post.commentCount}</span>
+                      <span>❤ {post.likeCount}</span>
+                    </div>
+                    <div className="write-date">{createDate}</div>
+                  </Footer>
                 </div>
-              </div>
-              <Footer>
-                <div className="write-date">2022-12-24 13:16</div>
-                <div className="interest">
-                  <span>👀 15</span>
-                  <span>💬 12</span>
-                  <span>❤ 3</span>
-                </div>
-              </Footer>
-            </div>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
+              );
+            })}
           </div>
         </SharingSpaceContainer>
       </PageMargin>
@@ -73,13 +98,14 @@ const SharingSpaceContainer = styled.div`
 
   .posts {
     margin-top: 80px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
 
     .item {
-      width: 100%;
-      height: 250px;
+      width: 80%;
+      height: 150px;
       background-color: ${(props) => props.theme.color.navy};
       border-radius: 12px;
       padding: 24px;
@@ -88,6 +114,8 @@ const SharingSpaceContainer = styled.div`
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      box-shadow: 0px 4px 12px rgba(14, 13, 13, 0.8);
+      cursor: pointer;
 
       .title {
         padding: 2px 0;
@@ -142,11 +170,16 @@ const Footer = styled.div`
   justify-content: space-between;
 
   .write-date,
-  .interest {
+  .counts {
     font-size: 14px;
   }
 
   span {
     padding: 0 6px;
   }
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

@@ -6,6 +6,8 @@ import { SignInPage } from "./pages/SignInPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { SharingSpacePage } from "./pages/SharingSpacePage";
 import { PostPage } from "./pages/PostPage";
+import { PostViewPage } from "./pages/PostViewPage";
+import { PostEditPatge } from "./pages/PostEditPage";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/sharing-space" element={<SharingSpacePage />} />
         <Route path="/post" element={<PostPage />} />
+        <Route path="/sharing-space/:docId" element={<PostViewPage />} />
+        <Route path="/sharing-space/:docId/edit" element={<PostEditPatge />} />
       </Routes>
     </>
   );

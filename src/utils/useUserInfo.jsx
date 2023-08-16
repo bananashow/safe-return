@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSignedInUserInfo } from "./getSignedInUserInfo";
+import { getSignedInUserInfo } from "./handleDataFromFirebase";
 
 // 현재 로그인된 유저의 정보를 가져옴
 export const useUserInfo = () => {

@@ -4,11 +4,17 @@ import { SignUpInButton } from "../components/buttonandInput/SignUpInButton";
 import { SignUpInInput } from "../components/buttonandInput/SignUpInInput";
 import { FcGoogle } from "react-icons/Fc";
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { useRef, useState } from "react";
 import { signInValidation } from "../utils/validation";
 import { useSetRecoilState } from "recoil";
 import { IsSignInStateAtom } from "../recoil/Atoms";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 
 export const SignInPage = () => {
   const navigation = useNavigate();
@@ -20,12 +26,15 @@ export const SignInPage = () => {
   const [password, setPassword] = useState("");
   const setIsSignInState = useSetRecoilState(IsSignInStateAtom);
 
-  const handleSignIn = () => {
+  const provider = new GoogleAuthProvider();
+  const db = getFirestore();
+  const auth = getAuth();
+
+  // 이메일로 로그인
+  const handleSignInWithEmail = () => {
     const isValid = signInValidation(email, password, emailRef, passwordRef);
     if (!isValid) return;
 
-    // 로그인
-    const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         localStorage.setItem("uid", userCredential.user.uid);
@@ -48,6 +57,27 @@ export const SignInPage = () => {
       });
   };
 
+  // 구글 계정으로 로그인
+  const handleSignInWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        localStorage.setItem("uid", result.user.uid);
+        setIsSignInState(true);
+        await setDoc(doc(db, "users", result.user.uid), {
+          email: result.user.email,
+          password: null,
+          name: result.user.displayName,
+          phone: result.user.phoneNumber,
+          signUpDate: result.user.metadata.creationTime,
+          accountType: "google",
+        });
+        navigation("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <LoginContainer>
@@ -64,7 +94,7 @@ export const SignInPage = () => {
           placeHolder="비밀번호를 입력하세요"
           onChange={(e) => setPassword(e.target.value)}
         ></SignUpInInput>
-        <SignUpInButton onClick={handleSignIn}>로그인</SignUpInButton>
+        <SignUpInButton onClick={handleSignInWithEmail}>로그인</SignUpInButton>
 
         <div className="hr-wrap">
           <hr /> <span>또는</span> <hr />
@@ -74,6 +104,7 @@ export const SignInPage = () => {
           backgdColor="#fff"
           hoverBackgdColor="#edf0f7"
           fontColor="#111111"
+          onClick={handleSignInWithGoogle}
         >
           <ArrangeIcons>
             <StyledFcGoogle />

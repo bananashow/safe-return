@@ -1,87 +1,88 @@
 import { styled } from "styled-components";
 import { BasicHeader } from "../components/BasicHeader";
 import { PageMargin } from "../components/PageMargin";
-import { useNavigate } from "react-router-dom";
 import { TinyEditor } from "../components/TinyEditor";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { useUserInfo } from "../utils/useUserInfo";
+import { updatePost } from "../utils/handleDataFromFirebase";
 import { postValidation } from "../utils/validation";
 import { useRef } from "react";
 
-export const PostPage = () => {
-  const db = getFirestore();
+export const PostEditPatge = () => {
   const navigation = useNavigate();
-  const [content, setContent] = useState("");
-  const user = useUserInfo();
-  const uid = localStorage.getItem("uid");
-
+  const location = useLocation();
+  const { docId } = useParams();
+  const postInfo = location.state.postInfo;
   const titleRef = useRef(null);
   const categoryRef = useRef(null);
 
+  const [newPost, setNewPost] = useState({
+    title: postInfo.title,
+    category: postInfo.category,
+    description: postInfo.description,
+  });
+
   const handleContent = (content) => {
-    setContent(content);
+    setNewPost((prev) => ({ ...prev, description: content }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const title = form.title.value;
-    const category = form.category.value;
-
-    const isValid = postValidation(title, category, titleRef, categoryRef);
+  const handleEdit = () => {
+    const isValid = postValidation(
+      newPost.title,
+      newPost.category,
+      titleRef,
+      categoryRef
+    );
     if (!isValid) return;
 
-    if (window.confirm("게시물을 등록할까요?")) {
-      //게시글을 firestore에 추가
-      const docRef = await addDoc(collection(db, "posts"), {
-        uid,
-        name: user.name,
-        category,
-        title,
-        description: content,
-        postedDate: new Date(),
-        updateDate: null,
-        viewCount: 0,
-        likeCount: 0,
-        commentCount: 0,
-      });
-      navigation(`/sharing-space/${docRef.id}`);
-    } else {
-      return;
-    }
+    updatePost(docId, newPost);
+    navigation(`/sharing-space/${docId}`);
   };
+
   return (
-    <PageMargin>
-      <BasicHeader>글쓰기</BasicHeader>
-      <PostContainer>
-        <form onSubmit={handleSubmit}>
+    <>
+      <PageMargin>
+        <BasicHeader>글 수정</BasicHeader>
+        <PostContainer>
           <div className="post-wrap">
             <input
               id="title"
               type="text"
               placeholder="제목을 입력하세요"
+              value={newPost.title}
+              onChange={(e) =>
+                setNewPost((prev) => ({ ...prev, title: e.target.value }))
+              }
               ref={titleRef}
             />
-            <select name="category" ref={categoryRef}>
+            <select
+              name="category"
+              value={newPost.category}
+              onChange={(e) =>
+                setNewPost((prev) => ({ ...prev, category: e.target.value }))
+              }
+              ref={categoryRef}
+            >
               <option value="">카테고리</option>
               <option value="나누어요">나누어요</option>
               <option value="제보해요">제보해요</option>
             </select>
             <div className="textarea">
-              <TinyEditor handleContent={handleContent} />
+              <TinyEditor
+                value={newPost.description}
+                handleContent={handleContent}
+              />
             </div>
             <div className="button-wrap">
-              <button type="submit">등록</button>
-              <button type="button" onClick={() => navigation(-1)}>
-                취소
+              <button className="edit" onClick={handleEdit}>
+                수정
               </button>
-              <button type="reset">다시쓰기</button>
+              <button onClick={() => navigation(-1)}>취소</button>
             </div>
           </div>
-        </form>
-      </PostContainer>
-    </PageMargin>
+        </PostContainer>
+      </PageMargin>
+    </>
   );
 };
 
@@ -139,7 +140,7 @@ const PostContainer = styled.div`
       cursor: pointer;
     }
 
-    button[type="submit"] {
+    .edit {
       background-color: ${(props) => props.theme.color.navy};
       color: #fff;
     }

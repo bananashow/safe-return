@@ -5,7 +5,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   KeywordFilterSelector,
   CategoryFilterSelector,
-} from "../recoil/FetchSelectors";
+} from "../recoil/FetchApiSelectors";
 import { SearchKeyword } from "../components/SearchKeyword";
 import { SearchCategories } from "../components/SearchCategories";
 import { PersonInfoModal } from "../components/PersonInfoModal";

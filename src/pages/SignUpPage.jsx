@@ -58,6 +58,7 @@ export const SignUpPage = () => {
         name: user.name,
         phone: user.phone,
         signUpDate: user.signUpDate,
+        accountType: "email",
       });
 
       // db 저장 후

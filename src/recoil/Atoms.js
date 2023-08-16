@@ -22,14 +22,8 @@ export const SearchCategoryAtom = atom({
   },
 });
 
-// 로그인 상태
+// 로그인 상태 : 최초 로딩 시 localStorage에서 가져옴
 export const IsSignInStateAtom = atom({
   key: "isSignInStateAtom",
-  default: false,
-});
-
-// 로그인된 계정의 정보
-export const SignedInUserInfo = atom({
-  key: "signedInUserInfo",
-  default: {},
+  default: Boolean(localStorage.getItem("uid")),
 });

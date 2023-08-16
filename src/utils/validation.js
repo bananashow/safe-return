@@ -79,3 +79,28 @@ export const signInValidation = (email, password, emailRef, passwordRef) => {
   }
   return true;
 };
+
+export const postValidation = (title, category, titleRef, categoryRef) => {
+  if (!title) {
+    alert("제목을 입력하세요.");
+    titleRef.current.focus();
+    return false;
+  }
+
+  if (category === "") {
+    alert("카테고리를 선택하세요.");
+    categoryRef.current.focus();
+    return false;
+  }
+
+  return true;
+};
+
+export const commentValidation = (content, contentRef) => {
+  if (!content) {
+    alert("댓글을 입력하세요.");
+    contentRef.current.focus();
+    return false;
+  }
+  return true;
+};
