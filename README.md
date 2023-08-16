@@ -142,16 +142,3 @@
     - 결국엔 배포 시 프록시 서버를 직접 구축해야 할 듯
     - http-proxy-middleware 라이브러리 사용 시도 → 404 error
 
-- [x]  **textarea 대신 Tiny Editor 라이브러리 활용**
-    - 태그 형태의 텍스트로 반환됨 → DB에 저장
-        - DB에 내용이 제대로 들어가지 못하는 이슈 발생(어쩌다 가끔 들어감)
-    - 데이터를 이스케이핑해서 db에 넣어봄
-        - 여전히 어쩌다 가끔 들어감
-            
-            ```jsx
-            encodeURIComponent();
-            decodeURIComponent();
-            ```
-            
-    - 에디터에 onEditorChange 속성을 넣으니 해결 (문서 좀 꼼꼼히 읽어라,,,,,,,,,,,🤦🏻‍♀️)
-
