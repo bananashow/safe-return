@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { styled } from "styled-components";
-import { PersonInfoModalAtom } from "../recoil/Atoms";
+import { PersonInfoModalAtom } from "../../recoil/Atoms";
 import { formatOccrde } from "./MissingPersonList";
 
 export const PersonInfoModal = ({ handleModal }) => {

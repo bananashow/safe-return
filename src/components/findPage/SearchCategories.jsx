@@ -1,7 +1,7 @@
 import { useSetRecoilState } from "recoil";
 import { styled } from "styled-components";
-import { SearchCategoryAtom } from "../recoil/Atoms";
-import { NavyButton } from "./buttonandInput/NavyButton";
+import { SearchCategoryAtom } from "../../recoil/Atoms";
+import { NavyButton } from "../styleElements/NavyButton";
 import { HiOutlineRefresh } from "react-icons/Hi";
 
 export const SearchCategories = ({ setCategoryClicked }) => {

@@ -1,23 +1,23 @@
 import { styled } from "styled-components";
-import { BasicHeader } from "../components/BasicHeader";
-import { PageMargin } from "../components/PageMargin";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   KeywordFilterSelector,
   CategoryFilterSelector,
 } from "../recoil/FetchApiSelectors";
-import { SearchKeyword } from "../components/SearchKeyword";
-import { SearchCategories } from "../components/SearchCategories";
-import { PersonInfoModal } from "../components/PersonInfoModal";
+import { SearchKeyword } from "../components/findPage/SearchKeyword";
+import { SearchCategories } from "../components/findPage/SearchCategories";
+import { PersonInfoModal } from "../components/findPage/PersonInfoModal";
 import { PersonInfoModalAtom } from "../recoil/Atoms";
 import { useState } from "react";
-import { MissingPersonList } from "../components/MissingPersonList";
+import { MissingPersonList } from "../components/findPage/MissingPersonList";
+import { PageMargin } from "../components/styleElements/PageMargin";
+import { BasicHeader } from "../components/styleElements/BasicHeader";
 
 export const FindPage = () => {
   const [categoryClicked, setCategoryClicked] = useState(false);
 
-  const search_Keyword = useRecoilValue(KeywordFilterSelector);
-  const search_Category = useRecoilValue(CategoryFilterSelector);
+  const searchKeyword = useRecoilValue(KeywordFilterSelector);
+  const searchCategory = useRecoilValue(CategoryFilterSelector);
 
   const [modalIsOpened, setModalIsOpened] = useState(false);
   const setPersonInfoModal = useSetRecoilState(PersonInfoModalAtom);
@@ -40,7 +40,7 @@ export const FindPage = () => {
           <SearchCategories setCategoryClicked={setCategoryClicked} />
         </SearchWrap>
         <MissingPersonList
-          data={categoryClicked ? search_Category : search_Keyword}
+          data={categoryClicked ? searchCategory : searchKeyword}
           personClick={personClick}
         />
         {modalIsOpened && <PersonInfoModal handleModal={handleModal} />}

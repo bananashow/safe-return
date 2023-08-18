@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
-import { SearchKeywordAtom } from "../recoil/Atoms";
+import { SearchKeywordAtom } from "../../recoil/Atoms";
 
 export const SearchKeyword = ({ setCategoryClicked }) => {
   const [searchKeywordAtom, setSearchKeywordAtom] =

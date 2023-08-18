@@ -1,25 +1,23 @@
 import { styled } from "styled-components";
 import { FaUserCircle } from "react-icons/fa";
-import { SmallNavyButton } from "./buttonandInput/SmallNavyButton";
-import { useUserInfo } from "../utils/useUserInfo";
+import { SmallNavyButton } from "../styleElements/SmallNavyButton";
 import { collection, getFirestore, addDoc } from "firebase/firestore";
 import { useState } from "react";
-import { commentValidation } from "../utils/validation";
+import { commentValidation } from "../../utils/validation";
 import { useRef } from "react";
-import { increaseCommentCount } from "../utils/handleDataFromFirebase";
+import { increaseCommentCount } from "../../utils/handleDataFromFirebase";
+import { SignedInUserInfoSelector } from "../../recoil/DatabaseSelectors";
+import { useRecoilValue } from "recoil";
 
 export const WriteComment = ({ docId }) => {
   const contentRef = useRef(null);
-  const user = useUserInfo();
+  const user = useRecoilValue(SignedInUserInfoSelector);
   const uid = localStorage.getItem("uid");
   const [comment, setComment] = useState("");
 
   const handleSubmit = async () => {
     const isValid = commentValidation(comment, contentRef);
     if (!isValid) return;
-
-    // 해당 posts의 commentCount를 +1처리
-    // VI3...
 
     if (window.confirm("댓글을 등록할까요?")) {
       const db = getFirestore();

@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
-import { BasicHeader } from "../components/BasicHeader";
-import { PageMargin } from "../components/PageMargin";
+import { BasicHeader } from "../components/styleElements/BasicHeader";
+import { PageMargin } from "../components/styleElements/PageMargin";
 import { TinyEditor } from "../components/TinyEditor";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";

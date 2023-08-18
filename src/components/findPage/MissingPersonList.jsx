@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
-import noImage from "../assets/noImage.jpg";
-import { Badge } from "../components/Badge";
-import { Pagination } from "../components/Pagination";
+import noImage from "../../assets/noImage.jpg";
+import { Badge } from "../styleElements/Badge";
+import { Pagination } from "../Pagination";
 import { useState } from "react";
 
 export const formatOccrde = (occrde) => {

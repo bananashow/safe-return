@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
-import { BasicHeader } from "../components/BasicHeader";
-import { SignUpInInput } from "../components/buttonandInput/SignUpInInput";
-import { SignUpInButton } from "../components/buttonandInput/SignUpInButton";
+import { BasicHeader } from "../components/styleElements/BasicHeader";
+import { SignUpInInput } from "../components/styleElements/SignUpInInput";
+import { SignUpInButton } from "../components/styleElements/SignUpInButton";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";

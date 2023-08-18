@@ -1,51 +1,38 @@
 import { styled } from "styled-components";
-import { PageMargin } from "../components/PageMargin";
+import { PageMargin } from "../components/styleElements/PageMargin";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
-import { BasicHeader } from "../components/BasicHeader";
-import { SmallNavyButton } from "../components/buttonandInput/SmallNavyButton";
+import { BasicHeader } from "../components/styleElements/BasicHeader";
+import { SmallNavyButton } from "../components/styleElements/SmallNavyButton";
 import {
   deletePost,
-  getPostInfo,
+  pushLikedUserUid,
+  removeLikedUserUid,
   toggleLikes,
 } from "../utils/handleDataFromFirebase";
-import { useState } from "react";
-import { useEffect } from "react";
 import { convertSecondsToDate } from "./SharingSpacePage";
-import { Comments } from "../components/Comments";
-import { WriteComment } from "../components/WriteComment";
+import { Comments } from "../components/comments/Comments";
+import { WriteComment } from "../components/comments/WriteComment";
+import { useRecoilValue } from "recoil";
+import {
+  LikedPostDocIdsByUserSelector,
+  PostInfoSelector,
+} from "../recoil/DatabaseSelectors";
 
 export const PostViewPage = () => {
   const navigation = useNavigate();
   const signedInUid = localStorage.getItem("uid");
   const { docId } = useParams();
-  const [postInfo, setPostInfo] = useState({});
-  const [likeState, setLikeState] = useState({
-    state: false,
-    likes: 0,
-  });
-
-  useEffect(() => {
-    (async () => {
-      const result = await getPostInfo(docId);
-      setPostInfo(result);
-      setLikeState((prev) => ({
-        ...prev,
-        likes: result.likeCount,
-      }));
-    })();
-  }, [docId]);
+  const postInfo = useRecoilValue(PostInfoSelector(docId));
+  const likedPostDocIdsArr = useRecoilValue(LikedPostDocIdsByUserSelector);
 
   const handleLikeCount = () => {
-    setLikeState((prev) => ({
-      state: !prev.state,
-      likes: prev.state ? prev.likes - 1 : prev.likes + 1,
-    }));
-
-    if (!likeState.state) {
-      toggleLikes(docId, 1);
-    } else {
+    if (likedPostDocIdsArr.includes(docId)) {
       toggleLikes(docId, -1);
+      removeLikedUserUid(docId, signedInUid);
+    } else {
+      toggleLikes(docId, 1);
+      pushLikedUserUid(docId, signedInUid);
     }
   };
 
@@ -120,12 +107,12 @@ export const PostViewPage = () => {
                     <span>💬</span> {postInfo.commentCount}
                   </div>
                   <div className="likes" onClick={handleLikeCount}>
-                    {likeState.state ? (
+                    {likedPostDocIdsArr.includes(docId) ? (
                       <span className="red-heart">❤</span>
                     ) : (
-                      <span>❤</span>
+                      <span>♡</span>
                     )}
-                    {likeState.likes}
+                    {postInfo.likeCount}
                   </div>
                 </div>
               </div>

@@ -1,15 +1,16 @@
 import { styled } from "styled-components";
 import { FaUserCircle } from "react-icons/fa";
-import { SmallNavyButton } from "./buttonandInput/SmallNavyButton";
-import { deleteComment, getComments } from "../utils/handleDataFromFirebase";
-import { useEffect } from "react";
+import { SmallNavyButton } from "../styleElements/SmallNavyButton";
+import { deleteComment } from "../../utils/handleDataFromFirebase";
 import { useState } from "react";
-import { convertSecondsToDate } from "../pages/SharingSpacePage";
+import { convertSecondsToDate } from "../../pages/SharingSpacePage";
 import { EditComment } from "./EditComment";
+import { useRecoilValue } from "recoil";
+import { CommentsSelector } from "../../recoil/DatabaseSelectors";
 
 export const Comments = ({ docId }) => {
   const signedInUid = localStorage.getItem("uid");
-  const [commentArr, setCommentArr] = useState([]);
+  const commentArr = useRecoilValue(CommentsSelector(docId));
   const [updateState, setUpdateState] = useState(false);
 
   const sortedComments = commentArr.slice().sort((a, b) => {
@@ -17,13 +18,6 @@ export const Comments = ({ docId }) => {
     const dateB = b.createdDate.seconds || 0;
     return dateB - dateA;
   });
-
-  useEffect(() => {
-    (async () => {
-      const result = await getComments(docId);
-      setCommentArr(result);
-    })();
-  }, [docId]);
 
   const handleDelete = (docId) => {
     if (confirm("댓글을 삭제할까요?")) {

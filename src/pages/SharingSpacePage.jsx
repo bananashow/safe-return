@@ -1,10 +1,16 @@
 import { styled } from "styled-components";
-import { PageMargin } from "../components/PageMargin";
-import { BasicHeader } from "../components/BasicHeader";
+import { PageMargin } from "../components/styleElements/PageMargin";
+import { BasicHeader } from "../components/styleElements/BasicHeader";
+import { SearchSection } from "../components/postPage/SearchSection";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { AllPostsSelector } from "../recoil/DatabaseSelectors";
+import {
+  CategoryPostSelector,
+  SearchPostSelector,
+} from "../recoil/DatabaseSelectors";
+import { LikedPostDocIdsByUserSelector } from "../recoil/DatabaseSelectors";
 import { increaseViews } from "../utils/handleDataFromFirebase";
+import { useState } from "react";
 
 export const convertSecondsToDate = (seconds) => {
   const date = new Date(seconds * 1000);
@@ -13,9 +19,25 @@ export const convertSecondsToDate = (seconds) => {
 
 export const SharingSpacePage = () => {
   const navigation = useNavigate();
-  const AllPosts = useRecoilValue(AllPostsSelector);
+  const [searchWord, setSearchWord] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  const sortedPosts = AllPosts?.slice().sort((a, b) => {
+  const searchWordPost = useRecoilValue(SearchPostSelector(searchWord));
+  const categoryPost = useRecoilValue(CategoryPostSelector(selectedCategory));
+  const likedPostArr = useRecoilValue(LikedPostDocIdsByUserSelector);
+
+  const handleSearchWord = (word) => {
+    setSearchWord(word);
+  };
+
+  const handleSelectedCategory = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const displayedPosts =
+    selectedCategory === "" ? searchWordPost : categoryPost;
+
+  const sortedPosts = displayedPosts?.slice().sort((a, b) => {
     const dateA = a.postedDate?.seconds || 0;
     const dateB = b.postedDate?.seconds || 0;
     return dateB - dateA;
@@ -23,7 +45,11 @@ export const SharingSpacePage = () => {
 
   const handlePostClick = (post) => {
     increaseViews(post.id);
-    navigation(`/sharing-space/${post.id}`, {});
+    navigation(`/sharing-space/${post.id}`, {
+      state: {
+        likedPostArr,
+      },
+    });
   };
 
   return (
@@ -31,24 +57,11 @@ export const SharingSpacePage = () => {
       <PageMargin>
         <BasicHeader>나눔 공간</BasicHeader>
         <SharingSpaceContainer>
-          <SearchSection>
-            <input type="text" placeholder="검색어를 입력하세요" />
-            <div>
-              <select>
-                <option>전체</option>
-                <option>나누어요</option>
-                <option>제보해요</option>
-              </select>
-              <button>내가 쓴 글</button>
-              <button
-                className="post-button"
-                onClick={() => navigation("/post")}
-              >
-                글쓰기
-              </button>
-            </div>
-          </SearchSection>
-
+          <SearchSection
+            handleSearchWord={handleSearchWord}
+            handleSelectedCategory={handleSelectedCategory}
+            selectedCategory={selectedCategory}
+          />
           <div className="posts">
             {sortedPosts.map((post) => {
               const createDate = convertSecondsToDate(post.postedDate?.seconds);
@@ -69,7 +82,12 @@ export const SharingSpacePage = () => {
                     <div className="counts">
                       <span>👀 {post.viewCount}</span>
                       <span>💬 {post.commentCount}</span>
-                      <span>❤ {post.likeCount}</span>
+                      {likedPostArr?.includes(post.id) ? (
+                        <span className="red-heart">❤</span>
+                      ) : (
+                        <span>♡</span>
+                      )}
+                      {post.likeCount}
                     </div>
                     <div className="write-date">{createDate}</div>
                   </Footer>
@@ -97,7 +115,7 @@ const SharingSpaceContainer = styled.div`
   }
 
   .posts {
-    margin-top: 80px;
+    margin-top: 60px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -145,25 +163,6 @@ const SharingSpaceContainer = styled.div`
   }
 `;
 
-const SearchSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  select,
-  button {
-    height: 40px;
-    border: none;
-    border-radius: 12px;
-    padding: 4px 8px;
-    margin: 16px 8px;
-    background-color: #fff;
-    width: 124px;
-    text-align: center;
-    cursor: pointer;
-  }
-`;
-
 const Footer = styled.div`
   display: flex;
   align-items: center;
@@ -176,6 +175,10 @@ const Footer = styled.div`
 
   span {
     padding: 0 6px;
+  }
+
+  .red-heart {
+    color: #f05858;
   }
 `;
 

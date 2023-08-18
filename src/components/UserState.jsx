@@ -1,14 +1,14 @@
 import { styled } from "styled-components";
 import { FaUserCircle } from "react-icons/fa";
-import { SmallNavyButton } from "./buttonandInput/SmallNavyButton";
-import { useUserInfo } from "../utils/useUserInfo";
-import { useSetRecoilState } from "recoil";
+import { SmallNavyButton } from "./styleElements/SmallNavyButton";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { IsSignInStateAtom } from "../recoil/Atoms";
 import { getAuth, signOut } from "firebase/auth";
+import { SignedInUserInfoSelector } from "../recoil/DatabaseSelectors";
 
 export const UserState = () => {
   const auth = getAuth();
-  const user = useUserInfo();
+  const user = useRecoilValue(SignedInUserInfoSelector);
   const setIsSignInState = useSetRecoilState(IsSignInStateAtom);
 
   const handleLogout = () => {

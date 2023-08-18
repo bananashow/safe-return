@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { styled } from "styled-components";
-import { SmallNavyButton } from "./buttonandInput/SmallNavyButton";
-import { updateComment } from "../utils/handleDataFromFirebase";
+import { SmallNavyButton } from "../styleElements/SmallNavyButton";
+import { updateComment } from "../../utils/handleDataFromFirebase";
 import { useRef } from "react";
-import { commentValidation } from "../utils/validation";
+import { commentValidation } from "../../utils/validation";
 
 export const EditComment = ({ comment, handleUpdateState }) => {
   const contentRef = useRef(null);

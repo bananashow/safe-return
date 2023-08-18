@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
-import { BasicHeader } from "../components/BasicHeader";
-import { SignUpInButton } from "../components/buttonandInput/SignUpInButton";
-import { SignUpInInput } from "../components/buttonandInput/SignUpInInput";
+import { BasicHeader } from "../components/styleElements/BasicHeader";
+import { SignUpInButton } from "../components/styleElements/SignUpInButton";
+import { SignUpInInput } from "../components/styleElements/SignUpInInput";
 import { FcGoogle } from "react-icons/Fc";
 import { Link, useNavigate } from "react-router-dom";
 import {

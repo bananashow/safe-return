@@ -1,19 +1,20 @@
 import { styled } from "styled-components";
-import { BasicHeader } from "../components/BasicHeader";
-import { PageMargin } from "../components/PageMargin";
+import { BasicHeader } from "../components/styleElements/BasicHeader";
+import { PageMargin } from "../components/styleElements/PageMargin";
 import { useNavigate } from "react-router-dom";
 import { TinyEditor } from "../components/TinyEditor";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { useState } from "react";
-import { useUserInfo } from "../utils/useUserInfo";
 import { postValidation } from "../utils/validation";
 import { useRef } from "react";
+import { useRecoilValue } from "recoil";
+import { SignedInUserInfoSelector } from "../recoil/DatabaseSelectors";
 
 export const PostPage = () => {
   const db = getFirestore();
   const navigation = useNavigate();
   const [content, setContent] = useState("");
-  const user = useUserInfo();
+  const user = useRecoilValue(SignedInUserInfoSelector);
   const uid = localStorage.getItem("uid");
 
   const titleRef = useRef(null);
@@ -45,6 +46,7 @@ export const PostPage = () => {
         viewCount: 0,
         likeCount: 0,
         commentCount: 0,
+        likedUserUids: [],
       });
       navigation(`/sharing-space/${docRef.id}`);
     } else {
