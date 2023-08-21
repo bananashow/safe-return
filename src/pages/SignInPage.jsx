@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { BasicHeader } from "../components/styleElements/BasicHeader";
 import { SignUpInButton } from "../components/styleElements/SignUpInButton";
-import { SignUpInInput } from "../components/styleElements/SignUpInInput";
+import { BasicInput } from "../components/styleElements/BasicInput";
 import { FcGoogle } from "react-icons/Fc";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -82,18 +82,18 @@ export const SignInPage = () => {
     <>
       <LoginContainer>
         <BasicHeader>Sign In</BasicHeader>
-        <SignUpInInput
+        <BasicInput
           ref={emailRef}
           inputType="email"
           placeHolder="이메일을 입력하세요"
           onChange={(e) => setEmail(e.target.value)}
-        ></SignUpInInput>
-        <SignUpInInput
+        ></BasicInput>
+        <BasicInput
           ref={passwordRef}
           inputType="password"
           placeHolder="비밀번호를 입력하세요"
           onChange={(e) => setPassword(e.target.value)}
-        ></SignUpInInput>
+        ></BasicInput>
         <SignUpInButton onClick={handleSignInWithEmail}>로그인</SignUpInButton>
 
         <div className="hr-wrap">

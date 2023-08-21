@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { BasicHeader } from "../components/styleElements/BasicHeader";
-import { SignUpInInput } from "../components/styleElements/SignUpInInput";
+import { BasicInput } from "../components/styleElements/BasicInput";
 import { SignUpInButton } from "../components/styleElements/SignUpInButton";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
@@ -80,28 +80,28 @@ export const SignUpPage = () => {
     <>
       <SignUpContainer>
         <BasicHeader>Sign Up</BasicHeader>
-        <SignUpInInput
+        <BasicInput
           ref={emailRef}
           inputType="email"
           placeHolder="이메일을 입력하세요"
           onChange={(e) =>
             setUser((prev) => ({ ...prev, email: e.target.value }))
           }
-        ></SignUpInInput>
-        <SignUpInInput
+        ></BasicInput>
+        <BasicInput
           ref={passwordRef}
           placeHolder="비밀번호를 입력하세요"
           onChange={(e) =>
             setUser((prev) => ({ ...prev, password: e.target.value }))
           }
           inputType="password"
-        ></SignUpInInput>
-        <SignUpInInput
+        ></BasicInput>
+        <BasicInput
           ref={passwordConfirmRef}
           placeHolder="비밀번호를 재입력하세요"
           inputType="password"
           onChange={(e) => setPasswordConfirm(e.target.value)}
-        ></SignUpInInput>
+        ></BasicInput>
         {(user.password !== passwordConfirm || !passwordConfirm) &&
           passwordConfirm !== "" && (
             <div className="warning">비밀번호가 다릅니다.</div>
@@ -110,20 +110,20 @@ export const SignUpPage = () => {
         <div className="hr-wrap">
           <hr /> <span>인적사항</span> <hr />
         </div>
-        <SignUpInInput
+        <BasicInput
           ref={nameRef}
           placeHolder="이름을 입력하세요"
           onChange={(e) =>
             setUser((prev) => ({ ...prev, name: e.target.value }))
           }
-        ></SignUpInInput>
-        <SignUpInInput
+        ></BasicInput>
+        <BasicInput
           ref={phoneRef}
           placeHolder="휴대폰 번호를 '-'없이 입력하세요"
           onChange={(e) =>
             setUser((prev) => ({ ...prev, phone: e.target.value }))
           }
-        ></SignUpInInput>
+        ></BasicInput>
         <SignUpInButton onClick={handleSignUp}>가입하기</SignUpInButton>
         <div className="login-footer-wrap">
           <div className="login-footer">

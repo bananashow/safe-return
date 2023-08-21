@@ -43,7 +43,7 @@ export const AllPostsSelector = selector({
   },
 });
 
-// 검색어 필터링
+// 검색
 export const SearchPostSelector = selectorFamily({
   key: "searchPostSelector",
   get:

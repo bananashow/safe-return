@@ -1,6 +1,7 @@
-import axios from "axios";
 import { selector } from "recoil";
 import { SearchCategoryAtom, SearchKeywordAtom } from "./Atoms";
+import { geocodeAddress } from "../utils/distanceCalculation";
+import axios from "axios";
 
 const WORKER_URL = "https://add-cors-to-requests.bananaqick.workers.dev";
 
@@ -10,6 +11,25 @@ export const MissingPersonAllDataSelector = selector({
   get: async () => {
     const allData = await axios.get(WORKER_URL);
     return allData.data;
+  },
+});
+
+// 전체 데이터에서 내 반경 30km 이하의 주소만 가져오기
+export const GetAddressesSelector = selector({
+  key: "getAddressesSelector",
+  get: async ({ get }) => {
+    const allData = get(MissingPersonAllDataSelector);
+
+    const addressesWithCoordinates = await Promise.all(
+      allData.map(async (data) => {
+        const address = data.occrAdres;
+        const coordinates = await geocodeAddress(address); // 주소를 좌표로 변환
+        const dataLat = coordinates.Ma;
+        const dataLng = coordinates.La;
+        return { ...data, dataLat, dataLng }; // 좌표 정보도 함께 반환
+      })
+    );
+    return addressesWithCoordinates;
   },
 });
 

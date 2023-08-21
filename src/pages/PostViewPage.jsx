@@ -13,11 +13,12 @@ import {
 import { convertSecondsToDate } from "./SharingSpacePage";
 import { Comments } from "../components/comments/Comments";
 import { WriteComment } from "../components/comments/WriteComment";
-import { useRecoilValue } from "recoil";
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import {
   LikedPostDocIdsByUserSelector,
   PostInfoSelector,
 } from "../recoil/DatabaseSelectors";
+import { MissingPersonAllDataSelector } from "../recoil/FetchApiSelectors";
 
 export const PostViewPage = () => {
   const navigation = useNavigate();
@@ -25,6 +26,7 @@ export const PostViewPage = () => {
   const { docId } = useParams();
   const postInfo = useRecoilValue(PostInfoSelector(docId));
   const likedPostDocIdsArr = useRecoilValue(LikedPostDocIdsByUserSelector);
+  const refreshPost = useRecoilRefresher_UNSTABLE(MissingPersonAllDataSelector);
 
   const handleLikeCount = () => {
     if (likedPostDocIdsArr.includes(docId)) {
@@ -36,7 +38,7 @@ export const PostViewPage = () => {
     }
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     navigation(`/sharing-space/${docId}/edit`, {
       state: {
@@ -45,10 +47,11 @@ export const PostViewPage = () => {
     });
   };
 
-  const handleDelete = (e) => {
+  const handleDelete = async (e) => {
     e.preventDefault();
     if (window.confirm("정말 삭제할까요?")) {
       deletePost(docId);
+      refreshPost();
       navigation("/sharing-space");
     } else {
       return;

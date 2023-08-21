@@ -21,7 +21,9 @@ export const NavBar = () => {
             <Link to="/find">
               <li>찾고 있어요</li>
             </Link>
-            <li>근처 실종자 확인</li>
+            <Link to="/location">
+              <li>근처 실종자 확인</li>
+            </Link>
             <Link to="/sharing-space">
               <li>나눔 공간</li>
             </Link>

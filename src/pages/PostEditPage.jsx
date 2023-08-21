@@ -8,7 +8,7 @@ import { updatePost } from "../utils/handleDataFromFirebase";
 import { postValidation } from "../utils/validation";
 import { useRef } from "react";
 
-export const PostEditPatge = () => {
+export const PostEditPage = () => {
   const navigation = useNavigate();
   const location = useLocation();
   const { docId } = useParams();

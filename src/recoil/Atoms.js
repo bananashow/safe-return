@@ -27,8 +27,3 @@ export const IsSignInStateAtom = atom({
   key: "isSignInStateAtom",
   default: Boolean(localStorage.getItem("uid")),
 });
-
-export const testAtom = atom({
-  key: "testAtom",
-  default: [],
-});

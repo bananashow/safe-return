@@ -1,24 +1,24 @@
 import { styled } from "styled-components";
 import { forwardRef } from "react";
 
-export const SignUpInInput = forwardRef(
+export const BasicInput = forwardRef(
   ({ placeHolder, onChange, inputType }, ref) => {
     return (
       <>
-        <SignUpInInputBox>
+        <BasicInputBox>
           <input
             ref={ref}
             type={inputType ? inputType : "text"}
             placeholder={placeHolder}
             onChange={onChange}
           />
-        </SignUpInInputBox>
+        </BasicInputBox>
       </>
     );
   }
 );
 
-const SignUpInInputBox = styled.div`
+const BasicInputBox = styled.div`
   display: flex;
   flex-direction: column;
 
