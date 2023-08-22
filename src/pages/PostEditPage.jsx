@@ -7,6 +7,8 @@ import { useState } from "react";
 import { updatePost } from "../utils/handleDataFromFirebase";
 import { postValidation } from "../utils/validation";
 import { useRef } from "react";
+import { useRecoilRefresher_UNSTABLE } from "recoil";
+import { PostInfoSelector } from "../recoil/DatabaseSelectors";
 
 export const PostEditPage = () => {
   const navigation = useNavigate();
@@ -15,6 +17,7 @@ export const PostEditPage = () => {
   const postInfo = location.state.postInfo;
   const titleRef = useRef(null);
   const categoryRef = useRef(null);
+  const refresh = useRecoilRefresher_UNSTABLE(PostInfoSelector(docId));
 
   const [newPost, setNewPost] = useState({
     title: postInfo.title,
@@ -36,6 +39,7 @@ export const PostEditPage = () => {
     if (!isValid) return;
 
     updatePost(docId, newPost);
+    refresh();
     navigation(`/sharing-space/${docId}`);
   };
 

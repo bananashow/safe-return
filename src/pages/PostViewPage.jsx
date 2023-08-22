@@ -15,10 +15,13 @@ import { Comments } from "../components/comments/Comments";
 import { WriteComment } from "../components/comments/WriteComment";
 import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import {
+  AllPostsSelector,
+  GetCountsSelector,
   LikedPostDocIdsByUserSelector,
   PostInfoSelector,
 } from "../recoil/DatabaseSelectors";
-import { MissingPersonAllDataSelector } from "../recoil/FetchApiSelectors";
+import { useEffect } from "react";
+import { useState } from "react";
 
 export const PostViewPage = () => {
   const navigation = useNavigate();
@@ -26,20 +29,39 @@ export const PostViewPage = () => {
   const { docId } = useParams();
   const postInfo = useRecoilValue(PostInfoSelector(docId));
   const likedPostDocIdsArr = useRecoilValue(LikedPostDocIdsByUserSelector);
-  const refreshPost = useRecoilRefresher_UNSTABLE(MissingPersonAllDataSelector);
+  const allDataRefresh = useRecoilRefresher_UNSTABLE(AllPostsSelector);
+  const countsRefresh = useRecoilRefresher_UNSTABLE(GetCountsSelector(docId));
+  const getCounts = useRecoilValue(GetCountsSelector(docId));
 
-  const handleLikeCount = () => {
-    if (likedPostDocIdsArr.includes(docId)) {
-      toggleLikes(docId, -1);
-      removeLikedUserUid(docId, signedInUid);
+  const [isLiked, setIsLiked] = useState(likedPostDocIdsArr.includes(docId));
+
+  useEffect(() => {
+    allDataRefresh();
+    setIsLiked(likedPostDocIdsArr.includes(docId));
+  }, [allDataRefresh, likedPostDocIdsArr, docId]);
+
+  useEffect(() => {
+    countsRefresh();
+  }, [countsRefresh]);
+
+  const handleLikeCount = async () => {
+    if (isLiked) {
+      await toggleLikes(docId, -1);
+      await removeLikedUserUid(docId, signedInUid);
+      countsRefresh();
     } else {
-      toggleLikes(docId, 1);
-      pushLikedUserUid(docId, signedInUid);
+      await toggleLikes(docId, 1);
+      await pushLikedUserUid(docId, signedInUid);
+      countsRefresh();
     }
+
+    setIsLiked(!isLiked);
+    countsRefresh();
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    allDataRefresh();
     navigation(`/sharing-space/${docId}/edit`, {
       state: {
         postInfo,
@@ -51,7 +73,7 @@ export const PostViewPage = () => {
     e.preventDefault();
     if (window.confirm("정말 삭제할까요?")) {
       deletePost(docId);
-      refreshPost();
+      allDataRefresh();
       navigation("/sharing-space");
     } else {
       return;
@@ -104,18 +126,18 @@ export const PostViewPage = () => {
                 )}
                 <div className="counts">
                   <div>
-                    <span>👀</span> {postInfo.viewCount}
+                    <span>👀</span> {getCounts.viewCount}
                   </div>
                   <div>
-                    <span>💬</span> {postInfo.commentCount}
+                    <span>💬</span> {getCounts.commentCount}
                   </div>
                   <div className="likes" onClick={handleLikeCount}>
-                    {likedPostDocIdsArr.includes(docId) ? (
-                      <span className="red-heart">❤</span>
+                    {isLiked ? (
+                      <span className="red-heart">❤️</span>
                     ) : (
                       <span>♡</span>
                     )}
-                    {postInfo.likeCount}
+                    {getCounts.likeCount}
                   </div>
                 </div>
               </div>
@@ -143,6 +165,7 @@ const PostContainer = styled.div`
   h2 {
     margin: 24px 0;
     font-size: 32px;
+    font-family: "noto-sans";
   }
 
   .description-wrap {
@@ -151,6 +174,7 @@ const PostContainer = styled.div`
     margin: 30px 0;
     padding: 30px 0;
     border-radius: 12px;
+    font-family: "noto-sans";
   }
 
   hr {

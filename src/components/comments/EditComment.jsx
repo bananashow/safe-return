@@ -9,16 +9,14 @@ export const EditComment = ({ comment, handleUpdateState }) => {
   const contentRef = useRef(null);
   const [commentContent, setCommentContent] = useState(comment.content);
 
-  console.log(comment);
-
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     const isValid = commentValidation(commentContent, contentRef);
     if (!isValid) return;
 
     const newPost = {
       content: commentContent,
     };
-    updateComment(comment.docId, newPost);
+    await updateComment(comment.docId, newPost);
     handleUpdateState(false);
   };
 

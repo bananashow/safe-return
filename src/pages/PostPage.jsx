@@ -7,8 +7,11 @@ import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { useState } from "react";
 import { postValidation } from "../utils/validation";
 import { useRef } from "react";
-import { useRecoilValue } from "recoil";
-import { SignedInUserInfoSelector } from "../recoil/DatabaseSelectors";
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
+import {
+  AllPostsSelector,
+  SignedInUserInfoSelector,
+} from "../recoil/DatabaseSelectors";
 
 export const PostPage = () => {
   const db = getFirestore();
@@ -16,6 +19,7 @@ export const PostPage = () => {
   const [content, setContent] = useState("");
   const user = useRecoilValue(SignedInUserInfoSelector);
   const uid = localStorage.getItem("uid");
+  const allDataRefresh = useRecoilRefresher_UNSTABLE(AllPostsSelector);
 
   const titleRef = useRef(null);
   const categoryRef = useRef(null);
@@ -48,6 +52,7 @@ export const PostPage = () => {
         commentCount: 0,
         likedUserUids: [],
       });
+      allDataRefresh();
       navigation(`/sharing-space/${docRef.id}`);
     } else {
       return;

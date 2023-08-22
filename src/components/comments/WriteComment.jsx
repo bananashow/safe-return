@@ -5,15 +5,21 @@ import { collection, getFirestore, addDoc } from "firebase/firestore";
 import { useState } from "react";
 import { commentValidation } from "../../utils/validation";
 import { useRef } from "react";
-import { increaseCommentCount } from "../../utils/handleDataFromFirebase";
-import { SignedInUserInfoSelector } from "../../recoil/DatabaseSelectors";
-import { useRecoilValue } from "recoil";
+import { toggleCommentCount } from "../../utils/handleDataFromFirebase";
+import {
+  CommentsSelector,
+  GetCountsSelector,
+  SignedInUserInfoSelector,
+} from "../../recoil/DatabaseSelectors";
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 
 export const WriteComment = ({ docId }) => {
   const contentRef = useRef(null);
   const user = useRecoilValue(SignedInUserInfoSelector);
   const uid = localStorage.getItem("uid");
   const [comment, setComment] = useState("");
+  const commentsRefresh = useRecoilRefresher_UNSTABLE(CommentsSelector(docId));
+  const countsRefresh = useRecoilRefresher_UNSTABLE(GetCountsSelector(docId));
 
   const handleSubmit = async () => {
     const isValid = commentValidation(comment, contentRef);
@@ -21,7 +27,7 @@ export const WriteComment = ({ docId }) => {
 
     if (window.confirm("댓글을 등록할까요?")) {
       const db = getFirestore();
-      increaseCommentCount(docId);
+      await toggleCommentCount(docId, 1);
 
       await addDoc(collection(db, "comments"), {
         postDocId: docId,
@@ -32,6 +38,8 @@ export const WriteComment = ({ docId }) => {
         updateDate: null,
       });
       setComment("");
+      commentsRefresh();
+      countsRefresh();
     } else {
       return;
     }

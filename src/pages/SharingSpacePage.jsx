@@ -3,14 +3,16 @@ import { PageMargin } from "../components/styleElements/PageMargin";
 import { BasicHeader } from "../components/styleElements/BasicHeader";
 import { SearchSection } from "../components/postPage/SearchSection";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import {
+  AllPostsSelector,
   CategoryPostSelector,
   SearchPostSelector,
 } from "../recoil/DatabaseSelectors";
 import { LikedPostDocIdsByUserSelector } from "../recoil/DatabaseSelectors";
 import { increaseViews } from "../utils/handleDataFromFirebase";
 import { useState } from "react";
+import { useEffect } from "react";
 
 export const convertSecondsToDate = (seconds) => {
   const date = new Date(seconds * 1000);
@@ -25,6 +27,15 @@ export const SharingSpacePage = () => {
   const searchWordPost = useRecoilValue(SearchPostSelector(searchWord));
   const categoryPost = useRecoilValue(CategoryPostSelector(selectedCategory));
   const likedPostArr = useRecoilValue(LikedPostDocIdsByUserSelector);
+  const allPostsRefresh = useRecoilRefresher_UNSTABLE(AllPostsSelector);
+  const likedPostArrRefresh = useRecoilRefresher_UNSTABLE(
+    LikedPostDocIdsByUserSelector
+  );
+
+  useEffect(() => {
+    likedPostArrRefresh();
+    allPostsRefresh();
+  }, [allPostsRefresh, likedPostArrRefresh]);
 
   const handleSearchWord = (word) => {
     setSearchWord(word);
@@ -43,8 +54,9 @@ export const SharingSpacePage = () => {
     return dateB - dateA;
   });
 
-  const handlePostClick = (post) => {
+  const handlePostClick = async (post) => {
     increaseViews(post.id);
+
     navigation(`/sharing-space/${post.id}`, {
       state: {
         likedPostArr,
@@ -78,6 +90,7 @@ export const SharingSpacePage = () => {
                     </div>
                     <div className="writer">{post.name}</div>
                   </Header>
+
                   <Footer>
                     <div className="counts">
                       <span>👀 {post.viewCount}</span>
@@ -102,6 +115,8 @@ export const SharingSpacePage = () => {
 };
 
 const SharingSpaceContainer = styled.div`
+  font-family: "noto-sans";
+
   input {
     width: 500px;
     height: 50px;
@@ -158,6 +173,8 @@ const SharingSpaceContainer = styled.div`
   }
 
   .post-button {
+    font-family: "gmarket-light";
+    font-weight: 900;
     background-color: ${(props) => props.theme.color.darkNavy};
     color: #fff;
   }
