@@ -1,22 +1,23 @@
 import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
-import { SearchKeywordAtom } from "../../recoil/Atoms";
+import { Find_SearchKeywordAtom } from "../../recoil/Atoms";
 
 export const SearchKeyword = ({ setCategoryClicked }) => {
-  const [searchKeywordAtom, setSearchKeywordAtom] =
-    useRecoilState(SearchKeywordAtom);
+  const [SearchKeywordAtom, setSearchKeywordAtom] = useRecoilState(
+    Find_SearchKeywordAtom
+  );
 
   return (
     <>
       <SearchKeywordContainer>
         <input
           type="text"
-          placeholder="이름이나 장소를 입력하세요"
+          placeholder="이름이나 주소를 입력하세요"
           onChange={(e) => {
             setSearchKeywordAtom(e.target.value);
             setCategoryClicked(false);
           }}
-          value={searchKeywordAtom}
+          value={SearchKeywordAtom}
         />
       </SearchKeywordContainer>
     </>

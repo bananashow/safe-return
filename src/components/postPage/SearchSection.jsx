@@ -61,6 +61,7 @@ const SearchSectionWrap = styled.div`
     width: 124px;
     text-align: center;
     cursor: pointer;
+    font-family: "gmarket-medium";
   }
 
   .reset {

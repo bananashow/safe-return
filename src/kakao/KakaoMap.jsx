@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { styled } from "styled-components";
-import { useRecoilValue } from "recoil";
-import { GetAddressesSelector } from "../recoil/FetchApiSelectors";
+import { showToastMessage } from "./showToastMsg";
 const { kakao } = window;
 
-export const KakaoMap = ({ handleNearbyPersonList }) => {
+export const KakaoMap = ({ geoCode }) => {
   const [myLocation, setMyLocation] = useState("");
-  const getAddressList = useRecoilValue(GetAddressesSelector);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -31,22 +29,9 @@ export const KakaoMap = ({ handleNearbyPersonList }) => {
       const mapContainer = document.getElementById("map");
       const mapOption = {
         center: myLocation,
-        level: 8,
+        level: 6,
       };
       const map = new kakao.maps.Map(mapContainer, mapOption);
-
-      // 원 생성
-      const circleOptions = {
-        center: myLocation,
-        radius: 30000, // 반경 30km
-        strokeWeight: 1,
-        strokeColor: "#333",
-        strokeOpacity: 0.7,
-        fillColor: "#ddd",
-        fillOpacity: 0.3,
-      };
-      const circle = new kakao.maps.Circle(circleOptions);
-      circle.setMap(map);
 
       // 현재 위치 마커 생성
       const userMarkerImage = new kakao.maps.MarkerImage(
@@ -62,39 +47,36 @@ export const KakaoMap = ({ handleNearbyPersonList }) => {
       });
       userMarker.setMap(map);
 
-      // 마커들 생성 및 원 내부 판별
-      const markers = [];
-      const validPersons = [];
-
-      const validAddresses = getAddressList.filter((data) => {
-        return data.dataLat !== 0 && data.dataLng !== 0;
-      });
-
-      validAddresses.forEach((addressData) => {
-        const position = new kakao.maps.LatLng(
-          addressData.dataLat,
-          addressData.dataLng
-        );
-
-        // 거리 계산
-        const line = new kakao.maps.Polyline({
-          path: [position, myLocation],
+      if (geoCode.Lat && geoCode.Lng) {
+        const markerPosition = new kakao.maps.LatLng(geoCode.Lat, geoCode.Lng);
+        const marker = new kakao.maps.Marker({
+          position: markerPosition,
         });
-        const distance = line.getLength();
+        marker.setMap(map);
+        map.setCenter(markerPosition);
 
-        if (distance <= 30000) {
-          const marker = new kakao.maps.Marker({
-            position: position,
-            map: map,
-          });
-          markers.push(marker);
-          validPersons.push(addressData);
-        }
-      });
-      handleNearbyPersonList(validPersons);
+        const circleOptions = {
+          center: markerPosition,
+          radius: 1000,
+          strokeWeight: 1,
+          strokeColor: "#333",
+          strokeOpacity: 0.7,
+          fillColor: "#ddd",
+          fillOpacity: 0.3,
+        };
+        const circle = new kakao.maps.Circle(circleOptions);
+        circle.setMap(map);
+      } else if (geoCode.Lat === "" && geoCode.Lng === "") {
+        const userMarker = new kakao.maps.Marker({
+          position: myLocation,
+          image: userMarkerImage,
+        });
+        userMarker.setMap(map);
+      } else {
+        showToastMessage(map, "주소가 정확하지 않아요!", myLocation);
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myLocation, getAddressList]);
+  }, [myLocation, geoCode]);
 
   return (
     <>
@@ -108,6 +90,6 @@ export const KakaoMap = ({ handleNearbyPersonList }) => {
 const KakaoMapWrap = styled.div`
   #map {
     width: 100%;
-    height: 500px;
+    height: 70vh;
   }
 `;
