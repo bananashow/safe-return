@@ -28,6 +28,8 @@ const SignUpInButtonBox = styled.div`
     padding: 0 12px;
     border: none;
     border-radius: 4px;
+    font-family: "gmarket-light";
+    font-weight: 900;
     color: ${(props) => (props.$fontColor ? props.$fontColor : "#fff")};
     cursor: pointer;
     transition: all 0.4s;

@@ -100,12 +100,12 @@ export const updateComment = async (docId, newPost) => {
   });
 };
 
-// 해당 posts의 댓글 commentCount를 +1
-export const increaseCommentCount = async (docId) => {
+// 해당 posts의 댓글 commentCount를 토글
+export const toggleCommentCount = async (docId, number) => {
   const db = getFirestore();
   const docRef = doc(db, "posts", docId);
   await updateDoc(docRef, {
-    commentCount: increment(1),
+    commentCount: increment(number),
   });
   return;
 };

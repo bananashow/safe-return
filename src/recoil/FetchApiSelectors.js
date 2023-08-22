@@ -1,6 +1,9 @@
 import { selector } from "recoil";
-import { SearchCategoryAtom, SearchKeywordAtom } from "./Atoms";
-import { geocodeAddress } from "../utils/distanceCalculation";
+import {
+  SearchCategoryAtom,
+  Find_SearchKeywordAtom,
+  Location_SearchKeywordAtom,
+} from "./Atoms";
 import axios from "axios";
 
 const WORKER_URL = "https://add-cors-to-requests.bananaqick.workers.dev";
@@ -14,35 +17,31 @@ export const MissingPersonAllDataSelector = selector({
   },
 });
 
-// 전체 데이터에서 내 반경 30km 이하의 주소만 가져오기
-export const GetAddressesSelector = selector({
-  key: "getAddressesSelector",
-  get: async ({ get }) => {
-    const allData = get(MissingPersonAllDataSelector);
-
-    const addressesWithCoordinates = await Promise.all(
-      allData.map(async (data) => {
-        const address = data.occrAdres;
-        const coordinates = await geocodeAddress(address); // 주소를 좌표로 변환
-        const dataLat = coordinates.Ma;
-        const dataLng = coordinates.La;
-        return { ...data, dataLat, dataLng }; // 좌표 정보도 함께 반환
-      })
-    );
-    return addressesWithCoordinates;
-  },
-});
-
-// 전체 데이터에서 검색어 필터링
+// 전체 데이터에서 검색어 or 주소로 검색
 export const KeywordFilterSelector = selector({
   key: "keywordFilterSelector",
   get: ({ get }) => {
     const allData = get(MissingPersonAllDataSelector);
-    const keyword = get(SearchKeywordAtom);
+    const keyword = get(Find_SearchKeywordAtom);
+
     const fileredData = allData.filter((person) => {
       return person.nm.includes(keyword) || person.occrAdres.includes(keyword);
     });
 
+    return fileredData;
+  },
+});
+
+// 전체 데이터에서 주소로 검색
+export const LocationFilterSelector = selector({
+  key: "locationFilterSelector",
+  get: ({ get }) => {
+    const allData = get(MissingPersonAllDataSelector);
+    const keyword = get(Location_SearchKeywordAtom);
+
+    const fileredData = allData.filter((person) => {
+      return person.occrAdres.includes(keyword);
+    });
     return fileredData;
   },
 });

@@ -6,9 +6,15 @@ export const PersonInfoModalAtom = atom({
   default: { person: null, imageSrc: null },
 });
 
-// 검색어
-export const SearchKeywordAtom = atom({
-  key: "searchKeywordAtom",
+// 검색어 - 찾고있어요 페이지
+export const Find_SearchKeywordAtom = atom({
+  key: "find_SearchKeywordAtom",
+  default: "",
+});
+
+// 검색어 - 실종자 위치 페이지
+export const Location_SearchKeywordAtom = atom({
+  key: "location_SearchKeywordAtom",
   default: "",
 });
 

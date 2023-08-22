@@ -141,6 +141,10 @@ const SignUpContainer = styled.div`
   margin: 0 auto;
   width: 300px;
 
+  input {
+    margin: 6px 0;
+  }
+
   .hr-wrap {
     margin: 12px 0;
     display: flex;

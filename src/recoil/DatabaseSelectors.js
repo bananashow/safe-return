@@ -144,3 +144,18 @@ export const CommentsSelector = selectorFamily({
     return commentArr;
   },
 });
+
+// docId의 조회수, 댓글수, 좋아요수를 가져옴
+export const GetCountsSelector = selectorFamily({
+  key: "getCountsSelector",
+  get: (docId) => async () => {
+    const db = getFirestore();
+    const docRef = doc(db, "posts", docId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log("No such document!");
+    }
+  },
+});

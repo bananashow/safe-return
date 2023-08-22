@@ -67,7 +67,7 @@ export const SignInPage = () => {
           email: result.user.email,
           password: null,
           name: result.user.displayName,
-          phone: result.user.phoneNumber,
+          phone: null,
           signUpDate: result.user.metadata.creationTime,
           accountType: "google",
         });
@@ -127,6 +127,10 @@ export const SignInPage = () => {
 const LoginContainer = styled.div`
   margin: 0 auto;
   width: 300px;
+
+  input {
+    margin: 6px 0;
+  }
 
   .hr-wrap {
     margin: 12px 0;
