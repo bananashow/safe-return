@@ -67,6 +67,7 @@ const FindContainer = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-family: "noto-sans";
 
   img {
     width: 150px;

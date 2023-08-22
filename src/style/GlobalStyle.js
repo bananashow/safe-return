@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import "./App.css";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -12,8 +13,11 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'gmarket-medium';
     background-color: ${(props) => props.theme.color.primary};
+    ::placeholder,select {
+      font-family: 'gmarket-medium';
+    }
   }
 
   a:link, a:visited, a:hover, a:active { color:black };

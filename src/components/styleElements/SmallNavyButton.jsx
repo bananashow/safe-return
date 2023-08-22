@@ -11,8 +11,10 @@ export const SmallNavyButton = (props) => {
 const Button = styled.button`
   border: none;
   border-radius: 4px;
+  font-family: "gmarket-light";
+  font-weight: 900;
   font-size: 11px;
-  padding: 2px 4px;
+  padding: 4px 6px;
   background-color: ${(props) => props.theme.color.navy};
   color: #fff;
   transition: all 0.3s;

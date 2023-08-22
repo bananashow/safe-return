@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import GlobalStyle from "./style/GlobalStyle.js";
@@ -12,7 +12,6 @@ import { getDatabase } from "firebase/database";
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseKey);
-
 // Initialize Realtime Database and get a reference to the service
 getDatabase(firebaseApp);
 
@@ -22,9 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <BrowserRouter>
-          <Suspense fallback="...loading">
-            <App />
-          </Suspense>
+          <App />
         </BrowserRouter>
       </ThemeProvider>
     </RecoilRoot>

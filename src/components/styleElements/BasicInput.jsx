@@ -19,14 +19,12 @@ export const BasicInput = forwardRef(
 );
 
 const BasicInputBox = styled.div`
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 
   input {
-    margin: 6px auto;
-    width: 300px;
-    height: 40px;
     padding: 0 12px;
+    width: 100%;
+    height: 40px;
     border: none;
     border-radius: 4px;
   }

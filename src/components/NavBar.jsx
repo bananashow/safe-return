@@ -1,12 +1,14 @@
 import { styled } from "styled-components";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UserState } from "./UserState";
 import { useRecoilValue } from "recoil";
 import { IsSignInStateAtom } from "../recoil/Atoms";
 
 export const NavBar = () => {
   const isSignIn = useRecoilValue(IsSignInStateAtom);
+  const { pathname } = useLocation();
+  const isActive = (path) => pathname === path;
 
   return (
     <>
@@ -19,13 +21,23 @@ export const NavBar = () => {
         <NavList>
           <ul>
             <Link to="/find">
-              <li>찾고 있어요</li>
+              <li className={isActive("/find") ? "active" : ""}>찾고 있어요</li>
             </Link>
             <Link to="/location">
-              <li>근처 실종자 확인</li>
+              <li className={isActive("/location") ? "active" : ""}>
+                실종자 위치
+              </li>
             </Link>
             <Link to="/sharing-space">
-              <li>나눔 공간</li>
+              <li
+                className={
+                  isActive("/sharing-space") || isActive("/post")
+                    ? "active"
+                    : ""
+                }
+              >
+                나눔 공간
+              </li>
             </Link>
           </ul>
         </NavList>
@@ -65,10 +77,20 @@ const NavList = styled.div`
     display: flex;
     justify-content: space-evenly;
     li {
-      padding: 4px 8px;
+      padding: 8px 12px;
       color: ${(props) => props.theme.color.darkNavy};
-      font-size: 16px;
-      font-weight: 700;
+      font-family: "gmarket-bold";
+      font-size: 18px;
+
+      &:hover {
+        transition: all 0.4s;
+        border-radius: 12px;
+        background-color: ${(props) => props.theme.color.dark};
+      }
+    }
+    .active {
+      border-radius: 12px;
+      background-color: ${(props) => props.theme.color.dark};
     }
   }
 `;
@@ -80,7 +102,6 @@ const UserContainer = styled.div`
     text-align: center;
     width: 120px;
     padding: 6px 16px;
-    background-color: ${(props) => props.theme.color.dark};
     border-radius: 12px;
     font-weight: 900;
   }

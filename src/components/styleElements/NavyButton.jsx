@@ -8,6 +8,8 @@ const Button = styled.button`
   margin: 0 4px;
   padding: 6px 16px;
   background-color: ${(props) => props.theme.color.navy};
+  font-family: "gmarket-light";
+  font-weight: 900;
   color: #fff;
   border-radius: 12px;
   border: none;

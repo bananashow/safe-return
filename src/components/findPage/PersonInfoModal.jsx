@@ -55,8 +55,8 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(26, 26, 26, 0.5);
   z-index: 999;
+  background-color: rgba(26, 26, 26, 0.5);
 `;
 
 const Modal = styled.div`
@@ -64,8 +64,9 @@ const Modal = styled.div`
   width: 750px;
   height: 450px;
   border-radius: 12px;
+  overflow: auto;
 
-  z-index: 1000;
+  z-index: 9999;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -76,7 +77,7 @@ const Modal = styled.div`
   align-items: center;
 
   h3 {
-    margin: 24px 0px;
+    margin: 28px 0px;
   }
 
   button {
@@ -101,7 +102,7 @@ const Modal = styled.div`
     ul {
       padding: 16px 28px;
       li {
-        font-size: 15px;
+        font-size: 16px;
         margin: 14px 0;
       }
     }

@@ -27,6 +27,7 @@ export const Badge = ({ number }) => {
 const BadgeWrap = styled.div`
   width: 36px;
   height: 24px;
+  font-family: "gmarket-light";
   font-size: 12px;
   font-weight: 600;
   background-color: ${(props) => props.color};

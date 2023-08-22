@@ -13,6 +13,6 @@ const PageTitle = styled.div`
   text-align: center;
 
   h2 {
-    padding: 32px 0;
+    padding: 52px 0;
   }
 `;
