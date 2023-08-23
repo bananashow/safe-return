@@ -108,6 +108,7 @@ const Window = styled.div`
 const Images = styled.div`
   background-image: url(${(props) => props.imageURL});
   width: 100%;
+  height: 95%;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   flex: none;
@@ -121,9 +122,9 @@ const Images = styled.div`
   }
 
   .news-title {
-    height: 50px;
+    height: 100%;
     font-family: "noto-sans";
-    font-size: 28px;
+    font-size: 24px;
     color: #fff;
     background-color: #444444;
     font-weight: 900;

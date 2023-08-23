@@ -1,20 +1,12 @@
 import axios from "axios";
 import { selector } from "recoil";
 
-const currentDate = new Date();
-const oneMonthAgo = new Date();
-oneMonthAgo.setMonth(currentDate.getMonth() - 1);
-
-const NEWS_URL = `https://newsapi.org/v2/everything?q="실종"&from=${
-  oneMonthAgo.toISOString().split("T")[0]
-}&to=${currentDate.toISOString().split("T")[0]}&sortBy=popularity&apiKey=${
-  import.meta.env.VITE_NEWS_API_KEY
-}`;
+const WORKER_URL = "https://news-add-cors-to-requests.bananaqick.workers.dev";
 
 export const NewsDataSelector = selector({
   key: "newsDataSelector",
   get: async () => {
-    const newsData = await axios.get(NEWS_URL);
+    const newsData = await axios.get(WORKER_URL);
     return newsData.data.articles;
   },
 });
