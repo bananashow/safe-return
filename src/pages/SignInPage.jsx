@@ -31,11 +31,11 @@ export const SignInPage = () => {
   const auth = getAuth();
 
   // 이메일로 로그인
-  const handleSignInWithEmail = () => {
+  const handleSignInWithEmail = async () => {
     const isValid = signInValidation(email, password, emailRef, passwordRef);
     if (!isValid) return;
 
-    signInWithEmailAndPassword(auth, email, password)
+    await signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         localStorage.setItem("uid", userCredential.user.uid);
         setIsSignInState(true);
@@ -58,8 +58,8 @@ export const SignInPage = () => {
   };
 
   // 구글 계정으로 로그인
-  const handleSignInWithGoogle = () => {
-    signInWithPopup(auth, provider)
+  const handleSignInWithGoogle = async () => {
+    await signInWithPopup(auth, provider)
       .then(async (result) => {
         localStorage.setItem("uid", result.user.uid);
         setIsSignInState(true);
