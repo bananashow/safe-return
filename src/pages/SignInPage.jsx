@@ -12,7 +12,7 @@ import {
 } from "firebase/auth";
 import { useRef, useState } from "react";
 import { signInValidation } from "../utils/validation";
-import { useSetRecoilState } from "recoil";
+import { useRecoilRefresher_UNSTABLE, useSetRecoilState } from "recoil";
 import { IsSignInStateAtom } from "../recoil/Atoms";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 
@@ -25,6 +25,7 @@ export const SignInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const setIsSignInState = useSetRecoilState(IsSignInStateAtom);
+  const isSignInRefresh = useRecoilRefresher_UNSTABLE(IsSignInStateAtom);
 
   const provider = new GoogleAuthProvider();
   const db = getFirestore();
@@ -39,6 +40,7 @@ export const SignInPage = () => {
       .then(async (userCredential) => {
         localStorage.setItem("uid", userCredential.user.uid);
         setIsSignInState(true);
+        isSignInRefresh();
         navigation("/");
       })
       .catch((error) => {
@@ -71,6 +73,7 @@ export const SignInPage = () => {
           signUpDate: result.user.metadata.creationTime,
           accountType: "google",
         });
+        isSignInRefresh();
         navigation("/");
       })
       .catch((error) => {
