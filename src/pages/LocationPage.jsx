@@ -1,4 +1,4 @@
-import { HiOutlineRefresh } from "react-icons/Hi";
+import { HiOutlineRefresh } from "react-icons/hi";
 import { BasicHeader } from "../components/styleElements/BasicHeader";
 import { PageMargin } from "../components/styleElements/PageMargin";
 import { SmallNavyButton } from "../components/styleElements/SmallNavyButton";

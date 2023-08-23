@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { BasicHeader } from "../components/styleElements/BasicHeader";
 import { SignUpInButton } from "../components/styleElements/SignUpInButton";
 import { BasicInput } from "../components/styleElements/BasicInput";
-import { FcGoogle } from "react-icons/Fc";
+import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import {
   GoogleAuthProvider,

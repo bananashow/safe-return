@@ -4,7 +4,7 @@ import {
   HiChevronDoubleLeft,
   HiChevronRight,
   HiChevronDoubleRight,
-} from "react-icons/Hi";
+} from "react-icons/hi";
 
 export const Pagination = ({ dataLength, currentPage, setCurrentPage }) => {
   const totalPage = Math.ceil(dataLength / 20);

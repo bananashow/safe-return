@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { HiOutlineRefresh } from "react-icons/Hi";
+import { HiOutlineRefresh } from "react-icons/hi";
 
 export const SearchSection = ({
   handleSearchWord,
