@@ -1,7 +1,11 @@
 import { styled } from "styled-components";
 import { FaUserCircle } from "react-icons/fa";
 import { SmallNavyButton } from "./styleElements/SmallNavyButton";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  useRecoilRefresher_UNSTABLE,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
 import { IsSignInStateAtom } from "../recoil/Atoms";
 import { getAuth, signOut } from "firebase/auth";
 import { SignedInUserInfoSelector } from "../recoil/DatabaseSelectors";
@@ -10,6 +14,7 @@ export const UserState = () => {
   const auth = getAuth();
   const user = useRecoilValue(SignedInUserInfoSelector);
   const setIsSignInState = useSetRecoilState(IsSignInStateAtom);
+  const isSignInRefresh = useRecoilRefresher_UNSTABLE(IsSignInStateAtom);
 
   const handleLogout = () => {
     if (window.confirm("로그아웃 할까요?")) {
@@ -17,6 +22,7 @@ export const UserState = () => {
         .then(() => {
           setIsSignInState(false);
           localStorage.removeItem("uid");
+          isSignInRefresh();
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -36,7 +42,8 @@ export const UserState = () => {
       <div className="user-info">
         <div className="user-name">{user.name}님</div>
         <div className="user-email">{user.email}</div>
-        <div>
+        <div className="buttons">
+          <SmallNavyButton>My</SmallNavyButton>
           <SmallNavyButton onClick={handleLogout}>로그아웃</SmallNavyButton>
         </div>
       </div>
@@ -55,7 +62,7 @@ const UserStateContainer = styled.div`
   .user-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
 
   .user-name {
@@ -65,6 +72,12 @@ const UserStateContainer = styled.div`
 
   .user-email {
     font-size: 12px;
+  }
+
+  .buttons {
+    button {
+      margin-right: 4px;
+    }
   }
 `;
 

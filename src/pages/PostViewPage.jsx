@@ -20,8 +20,9 @@ import {
   LikedPostDocIdsByUserSelector,
   PostInfoSelector,
 } from "../recoil/DatabaseSelectors";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FaEye } from "react-icons/fa";
+import { BsFillChatDotsFill, BsHeart, BsHeartFill } from "react-icons/bs";
 
 export const PostViewPage = () => {
   const navigation = useNavigate();
@@ -126,16 +127,26 @@ export const PostViewPage = () => {
                 )}
                 <div className="counts">
                   <div>
-                    <span>👀</span> {getCounts.viewCount}
+                    <span>
+                      <FaEye />
+                    </span>
+                    {getCounts.viewCount}
                   </div>
                   <div>
-                    <span>💬</span> {getCounts.commentCount}
+                    <span>
+                      <BsFillChatDotsFill />
+                    </span>
+                    {getCounts.commentCount}
                   </div>
                   <div className="likes" onClick={handleLikeCount}>
                     {isLiked ? (
-                      <span className="red-heart">❤️</span>
+                      <span className="red-heart">
+                        <BsHeartFill />
+                      </span>
                     ) : (
-                      <span>♡</span>
+                      <span>
+                        <BsHeart />
+                      </span>
                     )}
                     {getCounts.likeCount}
                   </div>
@@ -216,9 +227,15 @@ const Footer = styled.div`
   }
 
   .counts {
+    width: 130px;
     display: flex;
     gap: 12px;
     user-select: none;
+
+    & > div {
+      display: flex;
+      gap: 4px;
+    }
   }
 
   .buttons {

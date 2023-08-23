@@ -26,7 +26,6 @@ export const SearchSection = ({
             <option value="share">나누어요</option>
             <option value="report">제보해요</option>
           </select>
-          <button>내가 쓴 글</button>
           <span className="reset" onClick={() => handleSelectedCategory("")}>
             <HiOutlineRefresh />
           </span>

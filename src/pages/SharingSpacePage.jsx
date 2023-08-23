@@ -13,6 +13,8 @@ import { LikedPostDocIdsByUserSelector } from "../recoil/DatabaseSelectors";
 import { increaseViews } from "../utils/handleDataFromFirebase";
 import { useState } from "react";
 import { useEffect } from "react";
+import { FaEye } from "react-icons/fa";
+import { BsFillChatDotsFill, BsHeart, BsHeartFill } from "react-icons/bs";
 
 export const convertSecondsToDate = (seconds) => {
   const date = new Date(seconds * 1000);
@@ -93,14 +95,30 @@ export const SharingSpacePage = () => {
 
                   <Footer>
                     <div className="counts">
-                      <span>👀 {post.viewCount}</span>
-                      <span>💬 {post.commentCount}</span>
-                      {likedPostArr?.includes(post.id) ? (
-                        <span className="red-heart">❤</span>
-                      ) : (
-                        <span>♡</span>
-                      )}
-                      {post.likeCount}
+                      <div>
+                        <span>
+                          <FaEye />
+                        </span>
+                        {post.viewCount}
+                      </div>
+                      <div>
+                        <span>
+                          <BsFillChatDotsFill />
+                        </span>
+                        {post.commentCount}
+                      </div>
+                      <div className="likes">
+                        {likedPostArr?.includes(post.id) ? (
+                          <span className="red-heart">
+                            <BsHeartFill />
+                          </span>
+                        ) : (
+                          <span>
+                            <BsHeart />
+                          </span>
+                        )}
+                        {post.likeCount}
+                      </div>
                     </div>
                     <div className="write-date">{createDate}</div>
                   </Footer>
@@ -165,10 +183,6 @@ const SharingSpaceContainer = styled.div`
         font-weight: 700;
         margin: 12px 0;
       }
-
-      .content {
-        font-size: 14px;
-      }
     }
   }
 
@@ -185,8 +199,18 @@ const Footer = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  .write-date,
   .counts {
+    display: flex;
+    gap: 4px;
+    user-select: none;
+
+    & > div {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .write-date {
     font-size: 14px;
   }
 
