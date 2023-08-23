@@ -1,5 +1,8 @@
 import { styled } from "styled-components";
 import mainImage from "../assets/main-backgd.jpg";
+import { BasicHeader } from "../components/styleElements/BasicHeader";
+import { PageMargin } from "../components/styleElements/PageMargin";
+import { Carousel } from "../components/Carousel";
 
 export const MainPage = () => {
   return (
@@ -12,7 +15,14 @@ export const MainPage = () => {
           </p>
         </Notice>
       </TeddyImage>
-      <VideoContainer></VideoContainer>
+      <NewsContainer>
+        <PageMargin>
+          <div className="news-container">
+            <BasicHeader>실시간 실종 관련 뉴스</BasicHeader>
+            <Carousel />
+          </div>
+        </PageMargin>
+      </NewsContainer>
     </>
   );
 };
@@ -43,11 +53,15 @@ const Notice = styled.div`
     font-size: 38px;
     font-weight: 900;
     padding: 24px;
+    font-family: "noto-sans";
+    line-height: 70px;
   }
 `;
 
-const VideoContainer = styled.div`
+const NewsContainer = styled.div`
   background-color: #2e2e2e;
   width: 100%;
-  height: 500px;
+  height: 100%;
+  padding: 250px 0 100px 0;
+  color: #fff;
 `;
