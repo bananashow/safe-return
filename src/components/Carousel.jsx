@@ -20,11 +20,6 @@ export const Carousel = () => {
     setCurrentIdx(nextIndex);
   };
 
-  const handleDot = (i) => {
-    setCurrentIdx(i);
-    setStyle({ transform: `translate(-${i}00%)` });
-  };
-
   useEffect(() => {
     setStyle({ transform: `translate(-${currentIdx}00%)` });
   }, [currentIdx]);
@@ -41,7 +36,7 @@ export const Carousel = () => {
   }, []);
 
   const handleNewsClick = (item) => {
-    window.open(item.url, "_blank");
+    window.open(item.link, "_blank");
   };
 
   return (
@@ -53,36 +48,19 @@ export const Carousel = () => {
           </Prev>
           {newsList.map((item, idx) => (
             <>
-              <Images
+              <News
                 key={item.url + "_" + idx}
                 style={style}
                 onClick={() => handleNewsClick(item)}
               >
-                <img src={item.urlToImage} />
                 <div className="news-title">{item.title}</div>
-              </Images>
+              </News>
             </>
           ))}
           <Next role="button" onClick={() => moveSlide(1)}>
             ▶
           </Next>
         </Window>
-        <DotContainer>
-          <DotUl>
-            {newsList.map((item, idx) => {
-              return (
-                <>
-                  <li
-                    role="button"
-                    onClick={() => handleDot(idx)}
-                    key={item.url + "_" + idx}
-                    className={currentIdx === idx ? "dot-selected" : ""}
-                  ></li>
-                </>
-              );
-            })}
-          </DotUl>
-        </DotContainer>
       </Container>
     </>
   );
@@ -90,8 +68,7 @@ export const Carousel = () => {
 
 const Container = styled.section`
   width: 80%;
-  height: 80vh;
-  min-height: 200px;
+  height: 40px;
   background-color: white;
   position: relative;
   margin: 0 auto;
@@ -103,33 +80,27 @@ const Window = styled.div`
   display: flex;
   overflow: hidden;
   cursor: pointer;
+  background-color: #444444;
 `;
 
-const Images = styled.div`
+const News = styled.div`
   background-image: url(${(props) => props.imageURL});
-  width: 100%;
-  height: 95%;
   background-repeat: no-repeat;
   background-position: 50% 50%;
+  width: 100%;
   flex: none;
   transition: 0.3s;
   color: white;
-  background-color: #444444;
-
-  img {
-    width: 100%;
-    height: 80%;
-  }
 
   .news-title {
     height: 100%;
     font-family: "noto-sans";
-    font-size: 24px;
+    font-size: 14px;
     color: #fff;
     background-color: #444444;
     font-weight: 900;
     text-align: center;
-    padding: 16px;
+    padding: 10px;
   }
 `;
 
@@ -154,31 +125,4 @@ const Prev = styled.div`
 const Next = styled(Prev)`
   left: unset;
   right: 0;
-`;
-
-const DotContainer = styled.div`
-  width: 100%;
-  height: 50px;
-  position: absolute;
-  bottom: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const DotUl = styled.ul`
-  display: flex;
-  li {
-    border: 5px solid white;
-    border-radius: 50%;
-    background-color: #ffffff;
-    box-shadow: 1px 1px 2px #000000e6;
-    opacity: 0.5;
-    margin: 8px;
-    cursor: pointer;
-  }
-
-  .dot-selected {
-    opacity: 1;
-  }
 `;

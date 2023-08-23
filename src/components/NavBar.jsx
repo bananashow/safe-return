@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { UserState } from "./UserState";
 import { useRecoilValue } from "recoil";
 import { IsSignInStateAtom } from "../recoil/Atoms";
+import { Carousel } from "../components/Carousel";
 
 export const NavBar = () => {
   const isSignIn = useRecoilValue(IsSignInStateAtom);
@@ -51,6 +52,7 @@ export const NavBar = () => {
           )}
         </UserContainer>
       </NavigationContainer>
+      <Carousel />
     </>
   );
 };
