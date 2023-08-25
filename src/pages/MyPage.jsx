@@ -14,9 +14,12 @@ import {
 } from "firebase/auth";
 
 export const MyPage = () => {
+  const uid = localStorage.getItem("uid");
   const navigation = useNavigate();
-  const userInfo = useRecoilValue(SignedInUserInfoSelector);
-  const userRefresh = useRecoilRefresher_UNSTABLE(SignedInUserInfoSelector);
+  const userInfo = useRecoilValue(SignedInUserInfoSelector(uid));
+  const userRefresh = useRecoilRefresher_UNSTABLE(
+    SignedInUserInfoSelector(uid)
+  );
   const passwordRef = useRef(null);
 
   const [currentPassword, setCurrentPassword] = useState("");
