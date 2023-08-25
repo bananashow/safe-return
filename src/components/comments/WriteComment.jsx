@@ -15,8 +15,8 @@ import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 
 export const WriteComment = ({ docId }) => {
   const contentRef = useRef(null);
-  const user = useRecoilValue(SignedInUserInfoSelector);
   const uid = localStorage.getItem("uid");
+  const user = useRecoilValue(SignedInUserInfoSelector(uid));
   const [comment, setComment] = useState("");
   const commentsRefresh = useRecoilRefresher_UNSTABLE(CommentsSelector(docId));
   const countsRefresh = useRecoilRefresher_UNSTABLE(GetCountsSelector(docId));

@@ -17,8 +17,8 @@ export const PostPage = () => {
   const db = getFirestore();
   const navigation = useNavigate();
   const [content, setContent] = useState("");
-  const user = useRecoilValue(SignedInUserInfoSelector);
   const uid = localStorage.getItem("uid");
+  const user = useRecoilValue(SignedInUserInfoSelector(uid));
   const allDataRefresh = useRecoilRefresher_UNSTABLE(AllPostsSelector);
 
   const titleRef = useRef(null);

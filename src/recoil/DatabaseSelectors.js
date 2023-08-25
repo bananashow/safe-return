@@ -12,19 +12,24 @@ import {
 const uid = localStorage.getItem("uid");
 
 // uid로 사용자 정보 가져오기
-export const SignedInUserInfoSelector = selector({
+export const SignedInUserInfoSelector = selectorFamily({
   key: "signedInUserInfoSelector",
-  get: async () => {
-    const db = getFirestore();
-    const docRef = doc(db, "users", uid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      console.log("No such document!");
-    }
-  },
+  get:
+    (uid = localStorage.getItem("uid")) =>
+    async () => {
+      if (!uid) {
+        return null;
+      }
+      const db = getFirestore();
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return docSnap.data();
+      } else {
+        console.log("No such document!");
+        return null;
+      }
+    },
 });
 
 // --------------------- 게시판 ---------------------

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import { FaUserCircle } from "react-icons/fa";
 import { SmallNavyButton } from "./styleElements/SmallNavyButton";
@@ -7,12 +8,11 @@ import { getAuth, signOut } from "firebase/auth";
 import { SignedInUserInfoSelector } from "../recoil/DatabaseSelectors";
 import { Link, useNavigate } from "react-router-dom";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { useState, useEffect } from "react";
 
 export const UserState = () => {
-  const user = useRecoilValue(SignedInUserInfoSelector);
-  const navigation = useNavigate();
   const uid = localStorage.getItem("uid");
+  const user = useRecoilValue(SignedInUserInfoSelector(uid));
+  const navigation = useNavigate();
   const setIsSignInState = useSetRecoilState(IsSignInStateAtom);
 
   const [userImage, setUserImage] = useState(null);
