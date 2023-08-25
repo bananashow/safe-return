@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { forwardRef } from "react";
 
 export const BasicInput = forwardRef(
-  ({ placeHolder, onChange, inputType }, ref) => {
+  ({ placeHolder, onChange, inputType, value }, ref) => {
     return (
       <>
         <BasicInputBox>
@@ -11,6 +11,7 @@ export const BasicInput = forwardRef(
             type={inputType ? inputType : "text"}
             placeholder={placeHolder}
             onChange={onChange}
+            value={value}
           />
         </BasicInputBox>
       </>
