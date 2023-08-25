@@ -83,7 +83,7 @@ export const PostViewPage = () => {
 
   return (
     <PageMargin>
-      <BasicHeader>게시글 보기</BasicHeader>
+      <BasicHeader>{postInfo.category}</BasicHeader>
       <PostContainer>
         <form>
           <div className="post-wrap">

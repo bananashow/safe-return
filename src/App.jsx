@@ -15,9 +15,11 @@ import PrivateRoute from "./components/PrivateRoute";
 import { useRecoilValue } from "recoil";
 import { IsSignInStateAtom } from "./recoil/Atoms";
 import { Banner } from "./components/Banner";
+import { MyPage } from "./pages/MyPage";
 
 function App() {
   const isSignedIn = useRecoilValue(IsSignInStateAtom);
+
   return (
     <>
       <Suspense fallback={<LoadingPage />}>
@@ -62,6 +64,7 @@ function App() {
             }
           />
           <Route path="/location" element={<LocationPage />} />
+          <Route path="/my-page" element={<MyPage />} />
         </Routes>
       </Suspense>
     </>

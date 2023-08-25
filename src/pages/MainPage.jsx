@@ -38,6 +38,7 @@ const TeddyImage = styled.div`
 
 const Notice = styled.div`
   width: 80%;
+  min-width: 930px;
   height: 320px;
   background-color: rgba(17, 17, 17, 0.8);
   position: absolute;

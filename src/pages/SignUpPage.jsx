@@ -7,6 +7,8 @@ import { useRef, useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { signUpValidation } from "../utils/validation";
+import { UserProfileImage } from "../components/UserProfileImage";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const SignUpPage = () => {
   const navigation = useNavigate();
@@ -17,17 +19,23 @@ export const SignUpPage = () => {
   const phoneRef = useRef(null);
 
   const [user, setUser] = useState({
-    id: "",
     email: "",
     password: "",
     name: "",
     phone: "",
     signUpDate: new Date(),
   });
+
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleSelectedFile = (e) => {
+    setSelectedFile(e);
+  };
 
   const auth = getAuth();
   const db = getFirestore();
+  const storage = getStorage();
 
   const handleSignUp = async () => {
     const isValid = signUpValidation(
@@ -39,11 +47,10 @@ export const SignUpPage = () => {
       nameRef,
       phoneRef
     );
-
     if (!isValid) return;
 
     try {
-      // authentication에 사용자 생성
+      // 회원 가입
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         user.email,
@@ -51,7 +58,6 @@ export const SignUpPage = () => {
       );
       userCredential.user;
 
-      // 사용자 정보를 firestore에 추가
       await setDoc(doc(db, "users", userCredential.user.uid), {
         email: user.email,
         password: user.password,
@@ -61,17 +67,22 @@ export const SignUpPage = () => {
         accountType: "email",
       });
 
-      // db 저장 후
+      // 파일 업로드
+      if (selectedFile) {
+        const filePath = `profileImg/${userCredential.user.uid}.jpg`;
+        const storageRef = ref(storage, filePath);
+        await uploadBytes(storageRef, selectedFile);
+      }
+
       alert("가입 되었습니다.\n로그인 페이지로 이동합니다.");
       navigation("/signin");
     } catch (error) {
       const errorCode = error.code;
-      const errorMessage = error.message;
 
       if (errorCode === "auth/email-already-in-use") {
         alert("이미 사용중인 이메일입니다.");
       } else {
-        console.log(errorMessage);
+        console.error(error);
       }
     }
   };
@@ -79,7 +90,8 @@ export const SignUpPage = () => {
   return (
     <>
       <SignUpContainer>
-        <BasicHeader>Sign Up</BasicHeader>
+        <BasicHeader>회원가입</BasicHeader>
+        <UserProfileImage handleSelectedFile={handleSelectedFile} />
         <BasicInput
           ref={emailRef}
           inputType="email"

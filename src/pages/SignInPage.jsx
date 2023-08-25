@@ -6,13 +6,15 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import {
   GoogleAuthProvider,
+  browserSessionPersistence,
   getAuth,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import { useRef, useState } from "react";
 import { signInValidation } from "../utils/validation";
-import { useRecoilRefresher_UNSTABLE, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { IsSignInStateAtom } from "../recoil/Atoms";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 
@@ -25,7 +27,6 @@ export const SignInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const setIsSignInState = useSetRecoilState(IsSignInStateAtom);
-  const isSignInRefresh = useRecoilRefresher_UNSTABLE(IsSignInStateAtom);
 
   const provider = new GoogleAuthProvider();
   const db = getFirestore();
@@ -36,33 +37,36 @@ export const SignInPage = () => {
     const isValid = signInValidation(email, password, emailRef, passwordRef);
     if (!isValid) return;
 
-    await signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        localStorage.setItem("uid", userCredential.user.uid);
-        setIsSignInState(true);
-        isSignInRefresh();
-        navigation("/");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        if (errorCode === "auth/user-not-found") {
-          alert("이메일이 존재하지 않습니다.");
-          return;
-        } else if (errorCode === "auth/wrong-password") {
-          alert("비밀번호를 확인해주세요.");
-          return;
-        } else {
-          console.log(errorMessage);
+    try {
+      await setPersistence(auth, browserSessionPersistence);
+      await signInWithEmailAndPassword(auth, email, password).then(
+        async (userCredential) => {
+          localStorage.setItem("uid", userCredential.user.uid);
+          setIsSignInState(true);
+          navigation("/");
         }
-      });
+      );
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      if (errorCode === "auth/user-not-found") {
+        alert("이메일이 존재하지 않습니다.");
+        return;
+      } else if (errorCode === "auth/wrong-password") {
+        alert("비밀번호를 확인해주세요.");
+        return;
+      } else {
+        console.log(errorMessage);
+      }
+    }
   };
 
   // 구글 계정으로 로그인
   const handleSignInWithGoogle = async () => {
-    await signInWithPopup(auth, provider)
-      .then(async (result) => {
+    try {
+      await setPersistence(auth, browserSessionPersistence);
+      await signInWithPopup(auth, provider).then(async (result) => {
         localStorage.setItem("uid", result.user.uid);
         setIsSignInState(true);
         await setDoc(doc(db, "users", result.user.uid), {
@@ -73,18 +77,18 @@ export const SignInPage = () => {
           signUpDate: result.user.metadata.creationTime,
           accountType: "google",
         });
-        isSignInRefresh();
+        setIsSignInState(true);
         navigation("/");
-      })
-      .catch((error) => {
-        console.log(error);
       });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <>
       <LoginContainer>
-        <BasicHeader>Sign In</BasicHeader>
+        <BasicHeader>로그인</BasicHeader>
         <BasicInput
           ref={emailRef}
           inputType="email"

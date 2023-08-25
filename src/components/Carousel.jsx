@@ -47,15 +47,13 @@ export const Carousel = () => {
             ◀
           </Prev>
           {newsList.map((item, idx) => (
-            <>
-              <News
-                key={item.url + "_" + idx}
-                style={style}
-                onClick={() => handleNewsClick(item)}
-              >
-                <div className="news-title">{item.title}</div>
-              </News>
-            </>
+            <News
+              key={item.url + "_" + idx}
+              style={style}
+              onClick={() => handleNewsClick(item)}
+            >
+              <div className="news-title">{item.title}</div>
+            </News>
           ))}
           <Next role="button" onClick={() => moveSlide(1)}>
             ▶
