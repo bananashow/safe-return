@@ -2,6 +2,11 @@
 <b>현재 개발 진행중인 개인 프로젝트입니다.</b>
 <br />
 
+
+## ⚒️ 배포
+https://safe-return.vercel.app/
+
+
 ## 🔌 영상
 https://github.com/bananashow/safe-return/assets/85798544/84590384-7bc0-4cdc-b7b1-aa15f6de1462
 <br />
