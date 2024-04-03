@@ -1,5 +1,5 @@
 # Safe-Return
-<b>현재 개발 진행중인 개인 프로젝트입니다.</b>
+<b>React와 firebase 학습을 위한 개인 프로젝트입니다.</b>
 <br />
 
 
